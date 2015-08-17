@@ -13,22 +13,25 @@ echo "} " >> $1
 echo " "
 
 echo "public function index(){" >>$1
-echo "if("$dollar"this->input()->post("$sep$2$sep")){" >>$1
+echo "if("$dollar"this->input->post("$sep$1$sep")){" >>$1
 
 for arg; do
-	
-	echo ""$dollar$arg" = $this->input->post("$sep$arg$sep");" >>$1
+	if [ $arg != $1  ]; then
+	echo ""$dollar$arg" = """$dollar"this->input->post("$sep$arg$sep");" >>$1
+	fi
 done
 	echo ""$dollar"data = array(" >>$1
 for arg; do
-	echo ""$sep$arg$sep"=>"$sep$dollar$arg$sep",">> $1
+	if [ $arg != $1 ]; then
+	echo ""$sep$arg$sep"=>"$dollar$arg",">> $1
+	fi
 done
 echo "); " >> $1
 echo ""$dollar"this->load->database(); " >> $1
 echo ""$dollar"this->db->insert("$sep$1$sep","$dollar"data); ">>$1
 echo "}" >>$1
 echo "else{">>$1
-echo ""$dollar"this-load-view("$1");" >>$1
+echo ""$dollar"this->load->view("$sep$1$sep");" >>$1
 echo "		}" >>$1
 echo "	}" >>$1
 echo "}">>$1
@@ -44,8 +47,8 @@ touch $1
 echo '<form method="POST">' >>$1
 
 for arg; do
-	
-	if [ $arg != $1 ]; 
+
+	if [ $arg != $1 ];
 	then
 	echo $arg"<br/>">>$1
 	echo "What Form Element Suitable For "$arg
@@ -54,7 +57,7 @@ for arg; do
 	echo "3 - Option Box"
 
 	read option
-	
+
 	case $option in
 		1)
 		echo $arg" : ">>$1
@@ -76,11 +79,12 @@ for arg; do
 		echo "Error in selection"
 		;;
 
-		esac			
-	fi	
+		esac
+	fi
 done
 
-echo '<input type="submit"  value="Submit" name="'$1'/>' >> $1
-echo "</form>"
+echo '<input type="submit"  value="Submit" name='$sep2$1$sep2'/>' >> $1
+echo "</form>" >>$1
+
 
 cp $i $i$extension
